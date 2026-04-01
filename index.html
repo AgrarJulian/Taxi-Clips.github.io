@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Köln | Dashcam & Galerie</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #1a1a1a; color: white; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background-color: #ffcc00 !important; }
+        .navbar-brand { color: black !important; font-weight: bold; }
+        .gallery-item { margin-bottom: 20px; transition: transform 0.3s; }
+        .gallery-item:hover { transform: scale(1.02); }
+        .card { background: #2a2a2a; border: 1px solid #ffcc00; overflow: hidden; }
+        img, video { width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid #ffcc00; }
+        .badge-type { position: absolute; top: 10px; right: 10px; z-index: 10; }
+        h1 { color: #ffcc00; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">← ZURÜCK ZUR HAUPTSEITE</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="text-center">
+            <h1>Dashcam & Team-Momente</h1>
+            <p>Eindrücke aus dem Kölner Taxi-Alltag (Automatisch aktualisiert)</p>
+        </div>
+
+        <div class="row mt-5" id="gallery-container">
+            </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('gallery-container');
+        const maxItems = 200; // Wie viele Nummern er durchsuchen soll
+        const dataPath = 'data/'; // Dein Ordner
+
+        for (let i = 1; i <= maxItems; i++) {
+            
+            // 1. VERSUCHE BILD ZU LADEN (.jpg)
+            let img = new Image();
+            img.src = `${dataPath}${i}.jpg`;
+            img.onload = function() {
+                addCard(img.src, 'BILD', i);
+            };
+
+            // 2. VERSUCHE VIDEO ZU LADEN (.mp4)
+            // Wir erstellen ein Video-Element im Hintergrund zum Testen
+            let video = document.createElement('video');
+            video.src = `${dataPath}${i}.mp4`;
+            video.onloadedmetadata = function() {
+                addVideoCard(video.src, 'VIDEO', i);
+            };
+        }
+
+        function addCard(src, type, id) {
+            const html = `
+                <div class="col-md-4 col-sm-6 gallery-item">
+                    <div class="card position-relative">
+                        <span class="badge bg-warning text-dark badge-type">${type} #${id}</span>
+                        <img src="${src}" alt="Taxi Köln Moment">
+                    </div>
+                </div>`;
+            container.innerHTML += html;
+        }
+
+        function addVideoCard(src, type, id) {
+            const html = `
+                <div class="col-md-4 col-sm-6 gallery-item">
+                    <div class="card position-relative">
+                        <span class="badge bg-danger badge-type">${type} #${id}</span>
+                        <video controls>
+                            <source src="${src}" type="video/mp4">
+                            Dein Browser unterstützt keine Videos.
+                        </video>
+                    </div>
+                </div>`;
+            container.innerHTML += html;
+        }
+    </script>
+
+    <footer class="text-center mt-5 p-4 border-top border-warning">
+        <p>&copy; 2026 Taxi Köln Galerie</p>
+    </footer>
+
+</body>
+</html>
